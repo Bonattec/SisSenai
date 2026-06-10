@@ -55,10 +55,10 @@ app.post('/salvar-cliente', (req, res) => {
     const { nome, cpf, telefone } = req.body;
     db.run(`INSERT INTO clientes (nome, cpf, telefone) VALUES (?, ?, ?)`, [nome, cpf, telefone], (err) => {
         if (err) return res.status(500).send(err.message);
-        res.redirect('/clientes.html');
+        // CORREÇÃO: Responde com JSON para o fetch, em vez de redirecionar a página
+        res.json({ success: true });
     });
 });
-
 app.get('/listar-clientes', (req, res) => {
     db.all("SELECT * FROM clientes", [], (err, rows) => {
         if (err) return res.status(500).json(err);
@@ -67,16 +67,17 @@ app.get('/listar-clientes', (req, res) => {
 });
 
 app.put('/alterar-cliente/:id', (req,res) => {
-	const {id} = req.params;
-	const {nome, cpf, telefone} = req.body;
-	const sql = ÙPDATE cleintes SET nome = ?, cpf = ?, telefone = ? WHERE id = ?`;
+    const {id} = req.params;
+    const {nome, cpf, telefone} = req.body;
+    
+    // CORREÇÃO: Uso correto da crase (`) e nome da tabela "clientes" corrigido
+    const sql = `UPDATE clientes SET nome = ?, cpf = ?, telefone = ? WHERE id = ?`;
 
-	db.run(sql, [nome, cpf, telefone, id], (err) => {
-		if(err) return res.status(500).json({error: err.message})
-		res.json({success: true});
-		});
+    db.run(sql, [nome, cpf, telefone, id], (err) => {
+        if(err) return res.status(500).json({error: err.message})
+        res.json({success: true});
+    });
 });
-
 
 app.delete('/excluir-cliente/:id',(req,res) => {
 	const{id} = req.params;
