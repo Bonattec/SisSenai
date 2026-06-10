@@ -21,12 +21,13 @@
 
     <div class="container">
         <div class="card">
-            <h2>Novo Cadastro</h2>
-            <form action="/salvar-cliente" method="POST">
-                <input type="text" name="nome" placeholder="Nome do Cliente" required>
-                <input type="text" name="cpf" placeholder="CPF/CNPJ" required>
-                <input type="tel" name="telefone" placeholder="Telefone" required>
-                <button type="submit">Salvar Cliente</button>
+            <div class="card">
+    <h2 id="titulo-form">Novo Cadastro</h2> <form id="form-cliente">
+        <input type="text" name="nome" placeholder="Nome do Cliente" required>
+        <input type="text" name="cpf" placeholder="CPF/CNPJ" required>
+        <input type="tel" name="telefone" placeholder="Telefone" required>
+        <button type="submit" id="btn-salvar">Salvar Cliente</button> </form>
+</div>
             </form>
         </div>
 
@@ -70,26 +71,27 @@
             });
 		}
 
-document.getElementByld('form-cliente').onsubmit - function(e) {
-	e.preventDefault();
-	const id = this.dataset.id;
-	const dados = { 
-		nome: this.nome.value,
-		cpf:this.cpf.value,
-		telefone:this.telefone.value
-	};
+// CORREÇÃO: 'getElementById' escrito corretamente e uso do '=' no onsubmit
+document.getElementById('form-cliente').onsubmit = function(e) {
+    e.preventDefault();
+    const id = this.dataset.id;
+    const dados = { 
+        nome: this.nome.value,
+        cpf: this.cpf.value,
+        telefone: this.telefone.value
+    };
 
-	const url = id ? `/alterar-cliente/${id}`:'/salvar-cliente';
-	const metodo = id ? 'PUT' : 'POST';
+    const url = id ? `/alterar-cliente/${id}` : '/salvar-cliente';
+    const metodo = id ? 'PUT' : 'POST';
 
-	fetch(url, {
-		method: metodo,
-		headers:{'Content-Type':'application/json'},
-		body: JSON.stringify(dados)
-	}).then(()=> {
-		alert(id ? "Cliente alterado!":"Cliente salvo!");
-		location.reload();
-	});
+    fetch(url, {
+        method: metodo,
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(dados)
+    }).then(() => {
+        alert(id ? "Cliente alterado!" : "Cliente salvo!");
+        location.reload();
+    });
 };
 function excluirCliente(id) {
 	if (confirm("Deseja excluir este cliente?")){
@@ -98,16 +100,20 @@ function excluirCliente(id) {
 	}
 }
 function prepararEdicao(id, nome, cpf, telefone) {
-	const form = document.getElementById('form-cliente')
-	form.dataset,id = id;
-	form.nome.value = nome;
-	form.cpf.value = cpf;
-	form.telefone.value = telefone;
+    const form = document.getElementById('form-cliente');
+    
+    // CORREÇÃO: dataset.id (usar ponto final, não vírgula)
+    form.dataset.id = id;
+    form.nome.value = nome;
+    form.cpf.value = cpf;
+    form.telefone.value = telefone;
 
-	document.getElementById('titulo-form').innerText = "Editar Cadastro";
-	const btn = document.getElementById('btn-salvar')
-	btn.innerText = "Confirmar Alteração";
-	btn.style.background = "orange";
+    document.getElementById('titulo-form').innerText = "Editar Cadastro";
+    
+    const btn = document.getElementById('btn-salvar');
+    btn.innerText = "Confirmar Alteração";
+    btn.style.background = "orange";
+}
 }
 carregarClientes();
     </script>
